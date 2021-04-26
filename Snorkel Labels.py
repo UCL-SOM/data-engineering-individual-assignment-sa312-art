@@ -69,7 +69,7 @@ keyword_subscribe = make_keyword_lf(keywords=["subscribe"], label=NOT_OFFICIAL)
 """Unofficial tweets usually contain word http which links to another advertisment"""
 keyword_http = make_keyword_lf(keywords=["http"], label=NOT_OFFICIAL)
 
-#define a function which differentiates number of tweets based on length
+#define a function which differentiates tweets based on length (count of words)
 @labeling_function()
 def long_tweet(x):
     """Official tweets are often long, such as"""
