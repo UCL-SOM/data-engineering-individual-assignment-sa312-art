@@ -1,3 +1,5 @@
+
+#lambda code to process tweets automatically from S3 bucket to AWS Dynamodb
 import json
 import csv 
 import boto3
