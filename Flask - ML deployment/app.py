@@ -21,10 +21,10 @@ def remove_pattern(input_txt, pattern):
     return input_txt
 #function to generate a column about the punctuation of a tweet 
 def count_punc(text):
-    count = sum([i for char in text if char in string.punctuation])
+    count = sum([1 for char in text if char in string.punctuation])
     return round((count/len(text) - text.count(" ")), 3)*100
 #initiate the flask application 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 @app.route('/')
 def home():
@@ -32,7 +32,7 @@ def home():
 
 @app.route('/predict',methods=['POST'])
 def predict():
-    data = pd.read_csv('Tweets.csv', encoding="ANSI")
+    data = pd.read_csv('Tweets.csv')
     data.drop(['Unnamed: 0'], axis=1, inplace=True)
     data['text'] = np.vectorize(remove_pattern)(data['text'], "@[/w]*")
     data['text'] = np.vectorize(remove_pattern)(data['text'], r"http\S+")
@@ -48,7 +48,7 @@ def predict():
     cv = CountVectorizer(stop_words = 'english')
     cvdf = cv.fit_transform(data['text'])
     X_cv_feat = pd.concat([data['body_len'], data['punc%'], pd.DataFrame(cvdf.toarray())], axis =1)
-    X= X_tfidf_feat
+    X=  X_cv_feat
     y = data['label']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
     clf_1= LogisticRegression()
@@ -58,8 +58,8 @@ def predict():
         message = request.form['message']
         data = [message]
         vect = pd.DataFrame(cv.transform(data).toarray())
-        body_len = pd.DataFrame(len(data) - data.count(" "))
-        punc = ([count_punc(data)])
+        body_len = pd.DataFrame([len(data) - data.count(" ")])
+        punc = pd.DataFrame([count_punc(data)])
         total_data = pd.concat([body_len, punc,vect], axis =1)
         my_prediction = clf_1.predict(total_data)
     return render_template('result.html',prediction = my_prediction)
