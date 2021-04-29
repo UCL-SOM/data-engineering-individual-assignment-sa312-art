@@ -1,4 +1,3 @@
-
 #lambda code to process tweets automatically from S3 bucket to AWS Dynamodb
 import json
 import csv 
@@ -16,16 +15,16 @@ def lambda_handler(event, context):
         record_list = csv_file["Body"].read().decode('utf-8').split('\n')
         csv_reader = csv.reader(record_list, delimiter=',', quotechar='"')
         for row in csv_reader:
-            id = row[0] 
-            text = row[1] 
+            id = row[1] 
+            text = row[2] 
+            label = row[3]
             add_to_db = dynamodb.put_item(
                 TableName = 'covid_tweets',
                 Item = {
                     'id' : {'S': str(id)},
+                    'label' : {'S': str(label)},
                     'text' : {'S': str(text)},
                     })
             print("Successfully added")
     except Exception as e:
         print(str(e))
-        
-
