@@ -1,6 +1,8 @@
 # data-engineering-21_21-individual-assignment-sa312-art
 data-engineering-21_21-individual-assignment-sa312-art created by GitHub Classroom
+
 The project includes:
+
 1- Scraping a sample of tweets related to vaccines/vaccination (Scraping.py),
 
 2- Creating labeling functions to label these tweets and differentiate it as an official or non-official one using Snorkel (Snorkel.py)
